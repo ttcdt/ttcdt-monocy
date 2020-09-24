@@ -1,0 +1,21 @@
+ttcdt-monocy 1.00 - Tool for asymmetric encryption of files using monocypher
+ttcdt <dev@triptico.com>
+This software is released into the public domain.
+
+Usage:
+
+  ttcdt-monocy -G -p pubkey -s seckey     Generate key pairs
+  ttcdt-monocy -R -p pubkey -s seckey     Regenerate pubkey from seckey
+  ttcdt-monocy -E -p pubkey               Encrypt STDIN to STDOUT
+  ttcdt-monocy -D -s seckey               Decrypt STDIN to STDOUT
+
+Examples:
+ (on desktop)
+ $ ttcdt-monocy -G -p ~/.key.pub -s ~/.key.sec
+ $ scp ~/.key.pub server:~/.key.pub
+ (on server, secret key not needed there)
+ $ (cd / && sudo tar czvf - etc/) | ttcdt-monocy -E -p ~/.key.pub > encrypted
+ (back on desktop, to restore)
+ $ ttcdt-monocy -D -s ~/.key.sec < encrypted > decrypted.tar.gz
+
+Algorithms: Curve25519, Argon2i, Chacha20+Poly1305.
