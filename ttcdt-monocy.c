@@ -14,7 +14,7 @@
 
 #include "monocypher.h"
 
-#define VERSION "1.01"
+#define VERSION "1.02"
 
 //#define DEBUG
 
@@ -37,19 +37,19 @@ int random_fill(uint8_t *buf, int z)
 }
 
 
+#ifdef DEBUG
 void debug_hex(char *lbl, uint8_t *p, int size)
 {
-#ifdef DEBUG
-
     int n;
 
     fprintf(stderr, "%6s: ", lbl);
     for (n = 0 ; n < size; n++)
         fprintf(stderr, "%02x", p[n]);
     fprintf(stderr, "\n");
-
-#endif /* DEBUG */
 }
+#else /* DEBUG */
+#define debug_hex(l, p, s) ;
+#endif /* DEBUG */
 
 
 int read_key_file(uint8_t *p, int size, char *fn)
@@ -391,9 +391,10 @@ Algorithms: Curve25519, Argon2i, Chacha20+Poly1305.";
 
 int usage(void)
 {
-    printf("ttcdt-monocy %s - Tool for asymmetric encryption of files using monocypher\n",
+    fprintf(stderr,
+        "ttcdt-monocy %s - Tool for asymmetric encryption of files using monocypher\n",
         VERSION);
-    printf("%s\n", usage_str);
+    fprintf(stderr, "%s\n", usage_str);
 
     return 1;
 }
