@@ -14,7 +14,7 @@
 
 #include "monocypher.h"
 
-#define VERSION "1.02"
+#define VERSION "1.03"
 
 //#define DEBUG
 
@@ -293,8 +293,15 @@ int decrypt(FILE *i, FILE *o, char *sk_fn)
         goto end;
     }
 
-    /* does it have a valid and supported signature? */
-    if (bl[0] != 'n' || bl[1] != 'a' || bl[2] != 0x00 || bl[3] != 0x10) {
+    /* valid signature? */
+    if (bl[0] == 'n' && bl[1] == 'a' && bl[2] == 0x00) {
+        if (bl[3] != 0x10) {
+            ret = 4;
+            fprintf(stderr, "ERROR: (%d) signature for another format (%02X)\n", ret, bl[3]);
+            goto end;
+        }
+    }
+    else {
         ret = 4;
         fprintf(stderr, "ERROR: (%d) bad signature\n", ret);
         goto end;
